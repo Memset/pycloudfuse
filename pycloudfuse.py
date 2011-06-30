@@ -1,6 +1,22 @@
 #!/usr/bin/python
 """
 Fuse interface to Rackspace Cloudfiles & Openstack Object Storage
+
+FIXME sometimes gives this error
+
+LOOKUP /test
+getattr /test
+DEBUG:root:getattr('/test',) {}: enter
+DEBUG:root:stat '/test'
+DEBUG:root:stat path '/test'
+DEBUG:root:listdir ''
+DEBUG:root:listdir root
+WARNING:root:stat: Response error: 400: Bad request syntax ('0')
+DEBUG:root:getattr: caught error: [Errno 1] Operation not permitted: 400: Bad request syntax ('0')
+DEBUG:root:getattr: returns -1
+   unique: 111, error: -1 (Operation not permitted), outsize: 16
+
+FIXME retry?
 """
 
 # FIXME how do logging?
@@ -108,7 +124,7 @@ class CloudFuseFile(object):
     @return_errnos
     def fgetattr(self):
         if self.writing:
-            logging.debug("Returning synthetic stat for open file %r" % path)
+            logging.debug("Returning synthetic stat for open file %r" % self.path)
             mode = 0644|stat.S_IFREG
             mtime = time()
             bytes = 0           # FIXME could read bytes so far out of the open file
