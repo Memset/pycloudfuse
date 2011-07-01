@@ -72,24 +72,21 @@ class CloudFuseFile(object):
         #self.parent = parent
         #self.fs = fs
         self.path = path
-        open_mode = flags & (os.O_RDONLY | os.O_WRONLY | os.O_RDWR)
         self.reading = self.writing = False
-        if open_mode == os.O_RDONLY:
-            mode = "r"
-            self.reading = True
-        elif open_mode == os.O_WRONLY:
+        if flags & (os.O_WRONLY|os.O_CREAT):
             mode = "w"
             self.writing = True
-        elif open_mode == os.O_RDWR:
+        elif flags & os.O_RDWR:
+            # Not supported!
             mode = "rw"
             self.reading = True
             self.writing = True
         else:
-            logging.warn("Bad open mode %r" % flags)
-            return -errno.ENOSYS
+            mode = "r"
+            self.reading = True
         if flags & os.O_APPEND:
             mode += "+"
-        # FIXME ignores os.O_CREAT, os.O_TRUNC, os.O_EXCL
+        # FIXME ignores os.O_TRUNC, os.O_EXCL
         self.file = self.fs.open(path, mode)
         if self.writing:
             self.parent.file_opened(self.path)
@@ -247,10 +244,12 @@ class CloudFuse(fuse.Fuse):
 
     @return_errnos
     def chmod(self, path, mode):
+        return 0                # FIXME not really!
         return -errno.ENOSYS
 
     @return_errnos
     def chown(self, path, uid, gid):
+        return 0                # FIXME not really!
         return -errno.ENOSYS
 
     @return_errnos
@@ -335,6 +334,7 @@ class CloudFuse(fuse.Fuse):
 
     @return_errnos
     def utime(self, path, times):
+        return 0                # FIXME not really!
         return -errno.ENOSYS
 
     #@return_errnos
