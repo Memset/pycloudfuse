@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 setup(name='pycloudfuse',
-      version="0.01",
+      version="0.02",
       description='Fuse (Filesystem in Userspace) interface to Rackspace Cloud Files and Open Stack Object Storage (Swift)',
       author='Nick Craig-Wood',
       author_email='nick@memset.com',
